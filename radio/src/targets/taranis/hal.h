@@ -559,8 +559,13 @@
   #define TRIMS_GPIO_PIN_RVU            LL_GPIO_PIN_2  // PC.02
   #define TRIMS_GPIO_REG_RHL            GPIOC
   #define TRIMS_GPIO_PIN_RHL            LL_GPIO_PIN_13 // PC.13
-  #define TRIMS_GPIO_REG_RHR            GPIOC
-  #define TRIMS_GPIO_PIN_RHR            LL_GPIO_PIN_1  // PC.01
+  #if defined(S3_HW_MOD)
+    #define TRIMS_GPIO_REG_RHR            GPIOD
+    #define TRIMS_GPIO_PIN_RHR            LL_GPIO_PIN_11  // PD.11
+  #else
+    #define TRIMS_GPIO_REG_RHR            GPIOC
+    #define TRIMS_GPIO_PIN_RHR            LL_GPIO_PIN_1  // PC.01
+  #endif  // S3 HW MOD
 #else
   #define TRIMS_GPIO_REG_LHL            GPIOE
   #define TRIMS_GPIO_PIN_LHL            LL_GPIO_PIN_4  // PE.04
@@ -1531,14 +1536,23 @@
     #define ADC_VREF_PREC2              330
   #else
     #define ADC_GPIOB_PINS              (ADC_GPIO_PIN_POT2)
-    #define ADC_CHANNEL_POT3            0
+    #if defined(S3_HW_MOD)
+      #define ADC_GPIO_PIN_POT3           LL_GPIO_PIN_1  // PC.01
+      #define ADC_CHANNEL_POT3            LL_ADC_CHANNEL_11
+    #else
+      #define ADC_CHANNEL_POT3            0
+    #endif
     #define ADC_VREF_PREC2              300
   #endif
   #define ADC_GPIO_PIN_SLIDER1          LL_GPIO_PIN_4  // PC.04
   #define ADC_GPIO_PIN_SLIDER2          LL_GPIO_PIN_5  // PC.05
   #define ADC_GPIO_PIN_BATT             LL_GPIO_PIN_0  // PC.00
   #define ADC_GPIOA_PINS                (ADC_GPIO_PIN_STICK_RV | ADC_GPIO_PIN_STICK_RH | ADC_GPIO_PIN_STICK_LV | ADC_GPIO_PIN_STICK_LH | ADC_GPIO_PIN_POT1)
-  #define ADC_GPIOC_PINS                (ADC_GPIO_PIN_SLIDER1 | ADC_GPIO_PIN_SLIDER2 | ADC_GPIO_PIN_BATT)
+  #if defined(S3_HW_MOD)
+    #define ADC_GPIOC_PINS                (ADC_GPIO_PIN_SLIDER1 | ADC_GPIO_PIN_SLIDER2 | ADC_GPIO_PIN_BATT | ADC_GPIO_PIN_POT3)
+  #else
+    #define ADC_GPIOC_PINS                (ADC_GPIO_PIN_SLIDER1 | ADC_GPIO_PIN_SLIDER2 | ADC_GPIO_PIN_BATT)
+  #endif  // S3 HW MOD
   #define ADC_CHANNEL_POT1              LL_ADC_CHANNEL_6
   #define ADC_CHANNEL_POT2              LL_ADC_CHANNEL_8
   #define ADC_CHANNEL_SLIDER1           LL_ADC_CHANNEL_14
@@ -1883,7 +1897,11 @@
     #define ADC_DIRECTION { 1,1,-1,-1,-1,-1,-1,1, -1,1,1,-1, -1,-1 }
   #endif // HORUS_STICKS
 #elif defined(PCBX9DP)
-  #define ADC_DIRECTION {1,-1,1,-1,  1,1,-1,  1,1,  1,  1}
+  #if defined(S3_HW_MOD)
+    #define ADC_DIRECTION {1,-1,1,-1,  1,1,1,  1,1,  1,  1}
+  #else
+    #define ADC_DIRECTION {1,-1,1,-1,  1,1,-1,  1,1,  1,  1}
+  #endif  // S3 HW MOD
 #elif defined(PCBX9D)
   #define ADC_DIRECTION {1,-1,1,-1,  1,1,0,   1,1,  1,  1}
 #elif defined(RADIO_TX12)
